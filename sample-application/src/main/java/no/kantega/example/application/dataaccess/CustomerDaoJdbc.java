@@ -91,7 +91,7 @@ public class CustomerDaoJdbc implements CustomerDao {
 
     @Override
     public long countCustomers() {
-        return jdbcTemplate.queryForObject("select count * from customer", Long.class);
+        return jdbcTemplate.queryForObject("select count (*) from customer", Long.class);
         
     }
 

@@ -24,18 +24,18 @@ public class ProductDaoJdbc implements ProductDao {
 
     private static final String SELECT_ALL = "select * from product";
 
-    private static final String SELECT_SYSTEM = SELECT_ALL + WHERE_ID;
+    private static final String SELECT_PRODUCT = SELECT_ALL + WHERE_ID;
 
-    private static final String INSERT_SYSTEM = "insert into product(id,name,price)"
+    private static final String INSERT_PRODUCT = "insert into product(id,name,price)"
             + "values(?,?,?)";
 
-    private static final String UPDATE_SYSTEM = "update product set name = ?, price = ?" + WHERE_ID;
+    private static final String UPDATE_PRODUCT = "update product set name = ?, price = ?" + WHERE_ID;
 
 
-    private static final String DELETE_SYSTEM = "delete from system_config"+ WHERE_ID;
+    private static final String DELETE_PRODUCT = "delete from product"+ WHERE_ID;
 
 
-    private static final String COUNT_ROWS = "select count (id) as rowcount from system_config";
+    private static final String COUNT_ROWS = "select count (id) as rowcount from product";
 
     @Autowired
     private
@@ -43,14 +43,14 @@ public class ProductDaoJdbc implements ProductDao {
 
     @Override
     public boolean deleteProduct(String id) {
-        return getJdbcTemplate().update(DELETE_SYSTEM, id) > 0;
+        return getJdbcTemplate().update(DELETE_PRODUCT, id) > 0;
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<Product> getProduct(String id) {
         try {
-            Product systemConfig = getJdbcTemplate().queryForObject(SELECT_SYSTEM, productRowMapper(), id);
+            Product systemConfig = getJdbcTemplate().queryForObject(SELECT_PRODUCT, productRowMapper(), id);
 
             return Optional.of(systemConfig);
 
@@ -74,12 +74,12 @@ public class ProductDaoJdbc implements ProductDao {
         Optional<Product> existingId = getProduct(product.getId());
         if (existingId.isPresent()) {
             return getJdbcTemplate()
-                    .update(UPDATE_SYSTEM,
+                    .update(UPDATE_PRODUCT,
                             product.getName(),
                             product.getPrice(),
                             product.getId()) == 1;
         } else {
-            return getJdbcTemplate().update(INSERT_SYSTEM,
+            return getJdbcTemplate().update(INSERT_PRODUCT,
                     product.getId(),
                     product.getName(),
                     product.getPrice()) == 1;

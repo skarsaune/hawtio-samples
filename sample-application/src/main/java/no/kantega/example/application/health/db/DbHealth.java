@@ -7,7 +7,6 @@ import java.util.List;
 import javax.management.ObjectName;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import no.kantega.example.application.dataaccess.CustomerDao;
 import no.kantega.example.application.dataaccess.ProductDao;

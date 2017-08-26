@@ -7,6 +7,7 @@ import javax.sql.DataSource;
 import org.flywaydb.core.Flyway;
 import org.jolokia.support.spring.SpringJolokiaAgent;
 import org.jolokia.support.spring.SpringJolokiaConfigHolder;
+import org.jolokia.support.spring.SystemPropertyMode;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -25,6 +26,10 @@ import com.zaxxer.hikari.HikariDataSource;
 
 import no.kantega.example.application.dataaccess.CustomerDao;
 import no.kantega.example.application.dataaccess.CustomerDaoJdbc;
+import no.kantega.example.application.dataaccess.ProductDao;
+import no.kantega.example.application.dataaccess.ProductDaoJdbc;
+import no.kantega.example.application.health.HealthMBean;
+import no.kantega.example.application.health.db.DbHealth;
 
 @Configuration
 @EnableTransactionManagement
@@ -74,6 +79,7 @@ public class SpringConfig {
         jolokiaAgent.setExposeApplicationContext(true);// <=== NB! NB!
         jolokiaAgent.setLookupServices(true);
         jolokiaAgent.setConfig(config);
+        jolokiaAgent.setSystemPropertiesMode(SystemPropertyMode.OVERRIDE.name());
         return jolokiaAgent;
     }
 
@@ -89,10 +95,19 @@ public class SpringConfig {
     }
     
     @Bean
-    public CustomerDao customerDao() {
+    public CustomerDao customerDaoJdbc() {
         return new CustomerDaoJdbc();
     }
     
+    @Bean
+    public ProductDao productDaoJdbc() {
+        return new ProductDaoJdbc();
+    }
+    
+    @Bean
+    public HealthMBean dbHealth() {
+        return new DbHealth();
+    }
     
     @Bean
     public MBeanExporter jmxExporter() {

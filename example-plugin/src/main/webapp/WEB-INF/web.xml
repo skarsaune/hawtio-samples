@@ -5,8 +5,4 @@
   <listener>
     <listener-class>no.kantega.example.application.hawtio.plugin.ExamplePluginNotifier</listener-class>
   </listener>
-  <servlet-mapping>
-    <servlet-name>ContextAwareScriptServlet</servlet-name>
-    <url-pattern>*.js</url-pattern>
-  </servlet-mapping>
 </web-app>
