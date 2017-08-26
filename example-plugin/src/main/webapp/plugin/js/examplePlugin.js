@@ -26,7 +26,7 @@ var Example = (function(Example) {
 	 * The top level path of this plugin on the server
 	 * 
 	 */
-	Example.contextPath = "example-plugin/";
+	Example.contextPath = "/sample-plugin/";
 
 	/**
 	 * @property templatePath
@@ -34,7 +34,7 @@ var Example = (function(Example) {
 	 * 
 	 * The path to this plugin's partials
 	 */
-	Example.templatePath = Metermaid.contextPath + "plugin/html/";
+	Example.templatePath = Example.contextPath + "plugin/html/";
 	
 	Example.domain = "no.kantega.example.application";
 	
@@ -48,7 +48,7 @@ var Example = (function(Example) {
 	 * hawtioCore to run, which provides services like workspace, viewRegistry
 	 * and layoutFull used by the run function
 	 */
-	Metermaid.module = angular.module(Example.pluginName, [ 'hawtioCore' ]).config(
+	Example.module = angular.module(Example.pluginName, [ 'hawtioCore' ]).config(
 		function($routeProvider) {
 
 			/**
@@ -58,7 +58,7 @@ var Example = (function(Example) {
 			 * configured with.
 			 */
 			$routeProvider.when('/example_plugin', {
-				templateUrl : Metermaid.templatePath + 'example.html'
+				templateUrl : Example.templatePath + 'example.html'
 			});
 		});
 
@@ -122,43 +122,37 @@ var Example = (function(Example) {
 	 * @param $scope
 	 * @param jolokia
 	 * 
-	 * The controller for metermaid.html, only requires the jolokia service from
+	 * The controller for example.html, only requires the jolokia service from
 	 * hawtioCore
 	 * 
 	 */
-	Example.ExampleController = function($scope, jolokia, workspace) {
+	Example.ExampleController = function($scope, jolokia, workspace, $filter) {
 
 		// register a watch with jolokia on this mbean to
-		// get updated metrics
+		// regularly refresh display
 		Core.register(jolokia, $scope, {
-			type : 'exec',
-			operation: 'getStatusString()',
-			mbean : Example.pluginName,
+			type : 'read',
+			mbean : Example.mbean,
 			arguments : []
 		}, onSuccess(render));
 		
-
-
-		// update display of metric
+		// update display of attributes
 		function render(response) {
-			$scope.status = response.value;
+			$scope.attributes = response.value;
 			Core.$apply($scope);
 		}
 		
-		$scope.refreshCaches = function() {
-			DiagnosticCommand.log.info(Date.now() + " flushing caches");
+		$scope.flushCaches = function() {
+			Example.log.info($filter.date(Date.now()) + " flushing caches");
 			jolokia.request([ {
 				type : 'exec',
-				operation : 'refreshCaches()',
-				mbean : Example.pluginName,
+				operation : 'flushCaches()',
+				mbean : Example.mbean,
 				arguments : []
 			} ], onSuccess(function(response) {
-				$scope.classHistogram = response.value;
-				Core.$apply($scope);
-				DiagnosticCommand.log.info(Date.now() + " Refresh of cache was successful");
+				Core.notification("success", "Refreshed caches ");
 			}));
 		};
-
 	};
 
 	return Example;

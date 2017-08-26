@@ -107,4 +107,10 @@ public class ProductDaoJdbc implements ProductDao {
         return jdbcTemplate;
     }
 
+    @Override
+    public long countProducts() {
+        // TODO Auto-generated method stub
+        return getJdbcTemplate().queryForObject("select count(*) from product", Long.class); 
+    }
+
 }

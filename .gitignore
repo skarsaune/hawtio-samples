@@ -39,7 +39,9 @@ dependency-reduced-pom.xml
 #ActiveMQ
 activemq-data/
 
-#Configservice
-config_override/
-!DockerAlpine/config_override/
-applicationState.properties
+#Eclipse
+bin/
+.project
+.settings/
+.classpath
+

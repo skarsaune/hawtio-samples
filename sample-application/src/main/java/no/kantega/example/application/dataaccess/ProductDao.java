@@ -22,4 +22,6 @@ public interface ProductDao {
 
     @Transactional(readOnly = true)
     int getNumberOfRows();
+
+    long countProducts();
 }

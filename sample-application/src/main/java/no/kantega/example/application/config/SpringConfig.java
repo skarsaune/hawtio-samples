@@ -7,11 +7,16 @@ import javax.sql.DataSource;
 import org.flywaydb.core.Flyway;
 import org.jolokia.support.spring.SpringJolokiaAgent;
 import org.jolokia.support.spring.SpringJolokiaConfigHolder;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jmx.export.MBeanExporter;
+import org.springframework.jmx.export.annotation.AnnotationJmxAttributeSource;
+import org.springframework.jmx.export.assembler.MetadataMBeanInfoAssembler;
+import org.springframework.jmx.export.naming.MetadataNamingStrategy;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -63,7 +68,7 @@ public class SpringConfig {
     }
 
     @Bean
-    public SpringJolokiaAgent jolokiaAgent(final SpringJolokiaConfigHolder config) {
+    public SpringJolokiaAgent jolokiaAgent(final SpringJolokiaConfigHolder config, final ApplicationContext context) {
         SpringJolokiaAgent jolokiaAgent = new SpringJolokiaAgent();
         jolokiaAgent.setId("jolokiaAgent");
         jolokiaAgent.setExposeApplicationContext(true);// <=== NB! NB!
@@ -86,5 +91,15 @@ public class SpringConfig {
     @Bean
     public CustomerDao customerDao() {
         return new CustomerDaoJdbc();
+    }
+    
+    
+    @Bean
+    public MBeanExporter jmxExporter() {
+        MBeanExporter exporter = new MBeanExporter();
+        AnnotationJmxAttributeSource attributeSource = new AnnotationJmxAttributeSource();
+        exporter.setAssembler(new MetadataMBeanInfoAssembler(attributeSource));
+        exporter.setNamingStrategy(new MetadataNamingStrategy(attributeSource));
+        return exporter;
     }
 }

@@ -8,4 +8,6 @@ import java.util.List;
 public interface HealthMBean {
 
     List<HealthStatus> healthList() throws Exception;
+
+    String getCurrentStatus();
 }

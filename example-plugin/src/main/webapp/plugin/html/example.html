@@ -1,14 +1,10 @@
-<div class="metermaid" ng-controller="Metermaid.MetermaidController">
+<div ng-controller="Example.ExampleController">
 	<div class="row-fluid">
 		<div class="span10">
-			<h1>Quant metermaid</h1>
-			<p>Status:  {{status}}</p>
-			<button class="btn" ng-click="refreshCaches()">Refresh
+			<h4>Example application</h4>
+			<p>Version:  {{attributes.Version}}</p>
+			<button class="btn" ng-click="refreshCaches()"><i class="icon-repeat" ng-disabled="loading"></i>Refresh
 				caches</button>
-			<button class="btn" ng-click="shutdown()">
-				<i class="icon-shutdown"></i>Shut down!
-			</button>
 		</div>
 	</div>
-
 </div>

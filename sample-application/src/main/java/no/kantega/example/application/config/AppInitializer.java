@@ -22,11 +22,6 @@ public class AppInitializer implements WebApplicationInitializer {
         WebApplicationContext context = getContext();
         servletContext.addListener(new ContextLoaderListener(context));
 
-//        Dynamic jerseyRegistration = servletContext.addServlet("jerseyServlet", new ServletContainer(new no.kantega.example.application.config.JerseyConfig()));
-//        jerseyRegistration.addMapping("/*");
-        
-        
-
         servletContext.setInitParameter("contextClass", AnnotationConfigWebApplicationContext.class.getName());
         servletContext.setInitParameter("contextConfigLocation", SpringConfig.class.getName());
 
