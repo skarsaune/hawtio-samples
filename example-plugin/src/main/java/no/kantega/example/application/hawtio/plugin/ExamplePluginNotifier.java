@@ -18,7 +18,7 @@ public class ExamplePluginNotifier implements ServletContextListener {
   public void contextInitialized(ServletContextEvent servletContextEvent) {
 
     plugin = new HawtioPlugin();
-    plugin.setContext("/example-plugin");
+    plugin.setContext("/sample-plugin");
     plugin.setName("plugin_example");
     plugin.setScripts("plugin/js/examplePlugin.js");
     plugin.setDomain("no.kantega.example.application");

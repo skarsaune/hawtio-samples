@@ -24,7 +24,7 @@ public class ExampleApplicationManagement {
       
     @ManagedOperation
     public void flushCaches() {
-        
+        System.out.println("Pretend to flush cache");
     }
 
     private String versionFromMavenIfPossible(String group, String artifact) {

@@ -143,7 +143,7 @@ var Example = (function(Example) {
 		}
 		
 		$scope.flushCaches = function() {
-			Example.log.info($filter.date(Date.now()) + " flushing caches");
+			Example.log.info(" flushing caches");
 			jolokia.request([ {
 				type : 'exec',
 				operation : 'flushCaches()',

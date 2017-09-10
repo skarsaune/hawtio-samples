@@ -18,7 +18,7 @@ import org.springframework.web.filter.DelegatingFilterProxy;
 import no.kantega.example.application.config.SpringConfig;
 
 /**
- * ExampleApplicationMain to launch the elwin-adapter camel application in a standalone servlet container.
+ * I launch the application in an embedded Jetty
  */
 
 public class ExampleApplicationMain {
@@ -38,17 +38,17 @@ public class ExampleApplicationMain {
 
     public static void main(String[] args) {
         try {
-            Integer webappPort = Integer.parseInt(System.getProperty("server.port", "9999"));
-            ExampleApplicationMain glnConfigMain = new ExampleApplicationMain(webappPort);
+            Integer webappPort = Integer.parseInt(System.getProperty("server.port", "9898"));
+            ExampleApplicationMain application = new ExampleApplicationMain(webappPort);
             Runtime.getRuntime().addShutdownHook(new Thread() {
                 public void run() {
                     log.debug("ShutdownHook triggered. Exiting glnConfigMain");
-                    glnConfigMain.stop();
+                    application.stop();
                 }
             });
-            glnConfigMain.start();
+            application.start();
             log.debug("Finished waiting for Thread.currentThread().join()");
-            glnConfigMain.stop();
+            application.stop();
         } catch (RuntimeException|Error e) {
             log.error("Error during startup.", e);
             System.exit(1);
@@ -67,10 +67,12 @@ public class ExampleApplicationMain {
         context.setInitParameter("contextClass", AnnotationConfigWebApplicationContext.class.getName());
         context.setInitParameter("contextConfigLocation", SpringConfig.class.getName());
 
+//        context.getServletContext().addServlet("dispatcherServlet", DispatcherServlet.class).addMapping("/*");
         //Spring security
         FilterRegistration.Dynamic securityFilter = context.getServletContext()
                                                            .addFilter(DEFAULT_FILTER_NAME, DelegatingFilterProxy.class);
         securityFilter.addMappingForUrlPatterns(allOf(DispatcherType.class), false, "/*");
+        
 
         server.setHandler(context);
 
